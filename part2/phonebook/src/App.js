@@ -1,15 +1,53 @@
 import { useState } from 'react'
 
+const Filter = ({ action }) => {
+  return (
+    <form>
+      <div>
+        filter shown contacts <input onChange={action} />
+      </div>
+    </form>
+  )
+}
+
+const PersonForm = ({ nameAction, newName, numberAction, newNumber, addPerson }) => {
+  return (
+    <form onSubmit={addPerson}>
+      <div>
+        name: <input onChange={nameAction} value={newName} />
+      </div>
+      <div>
+        number: <input onChange={numberAction} value={newNumber} /></div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  )
+}
+
+const ContactList = ({ persons, filterText }) => {
+  return (
+    <div>
+      {persons.filter(person => person.name.toLowerCase()
+        .includes(filterText.toLowerCase()))
+        .map(person => <p key={person.name}>{person.name} {person.number}</p>)}
+    </div>
+
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([
-    {
-      name: "Arto Hellas",
-      number: "123123"
-    },
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
   ])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const clearFields = () =>{
+  const [filterText, setFilterText] = useState("")
+
+  const clearFields = () => {
     setNewName("")
     setNewNumber("")
   }
@@ -39,24 +77,29 @@ const App = () => {
     setNewName(event.target.value)
   }
 
+  const handleFilterChange = (event) => {
+    setFilterText(event.target.value)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input onChange={handleNameChange} value={newName} />
-        </div>
-        <div>
-          number: <input onChange={handleNumberChange} value={newNumber} /></div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      
+      <Filter action={handleFilterChange} />
+      
+      <h3>Add new contact</h3>
+      
+      <PersonForm
+        nameAction={handleNameChange} newName={newName}
+        numberAction={handleNumberChange} newNumber={newNumber}
+        addPerson={addPerson} />
+      
       <h2>Numbers</h2>
-      {persons.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
+      
+      <ContactList persons={persons} filterText={filterText} />
+      
     </div>
   )
-
 }
 
 export default App
