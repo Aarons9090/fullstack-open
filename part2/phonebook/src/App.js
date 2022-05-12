@@ -32,7 +32,6 @@ const ContantListElement = ({ person, setPersons, persons }) => {
 
   const handleRemoveButton = (event) => {
     if (window.confirm(`Are you sure you want to delete ${person.name}`)) {
-      console.log("delete", person)
       event.preventDefault()
       personService.removePerson(person.id).then(
         setPersons(persons.filter(p => p.id !== person.id))
@@ -51,8 +50,9 @@ const ContantListElement = ({ person, setPersons, persons }) => {
 const ContactList = ({ persons, filterText, setPersons }) => {
   return (
     <div>
-      {persons.filter(person => person.name.toLowerCase()
-        .includes(filterText.toLowerCase()))
+      {persons
+        .filter(person => person.name.toLowerCase()
+          .includes(filterText.toLowerCase()))
         .map(person => <ContantListElement person={person} setPersons={setPersons} persons={persons} />)}
 
     </div>
@@ -60,14 +60,24 @@ const ContactList = ({ persons, filterText, setPersons }) => {
   )
 }
 
-const MessageBar = ({ message }) => {
+const SuccessMessage = ({ message }) => {
   if (message === null) {
     return null
-
   }
 
   return <div>
     <p className='successMessage'>{message}</p>
+  </div>
+
+}
+
+const ErrorMessage = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return <div>
+    <p className='errorMessage'>{message}</p>
   </div>
 
 }
@@ -78,6 +88,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filterText, setFilterText] = useState("")
   const [message, setMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService.getAll().then(data => {
@@ -91,12 +102,20 @@ const App = () => {
     setNewNumber("")
   }
 
-  const ShowMessage = () => {
-    setMessage("New contact added succesfully")
+  const ShowMessage = (msg) => {
+    setMessage(msg)
     setTimeout(() => {
       setMessage(null)
     }, 5000)
   }
+
+  const ShowErrorMessage = (msg) => {
+    setErrorMessage(msg)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
+
   const addPerson = (event) => {
     console.log(newName)
     event.preventDefault()
@@ -111,9 +130,13 @@ const App = () => {
         personService.updatePerson(newPerson.id, newPerson).then(
           response => {
             setPersons(persons.map(person => person.id !== newPerson.id ? person : response))
-            ShowMessage()
+            ShowMessage(`${newName} edited`)
 
           }
+        ).catch(error => {
+          ShowErrorMessage(`Error: ${newName} removed from server`)
+        }
+
         )
       }
       clearFields()
@@ -127,9 +150,10 @@ const App = () => {
 
     personService.create(personObj).then(returnedPerson => {
       setPersons(persons.concat(returnedPerson))
-      ShowMessage()
+      ShowMessage(`${newName} added`)
+    }).catch(error => {
+      ShowErrorMessage(`Error: ${newName} removed from server`)
     })
-
 
     clearFields()
   }
@@ -148,7 +172,9 @@ const App = () => {
 
   return (
     <div>
-      <MessageBar message={message} />
+      <SuccessMessage message={message} />
+      <ErrorMessage message={errorMessage} />
+
       <h2>Phonebook</h2>
 
       <Filter action={handleFilterChange} />
