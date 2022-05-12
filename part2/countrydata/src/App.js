@@ -13,7 +13,18 @@ const Filter = ({ action }) => {
 
 const Flag = ({ country }) => <img src={country.flags.png} alt={country.name.common} />
 
-
+const DisplayCountry = ({ country }) => {
+  return (
+    <div>
+      <h1>{country.name.common}</h1>
+      <p>Capital {country.capital}</p>
+      <p>Area {country.area}</p>
+      <h3>Languages:</h3>
+      <Languages country={country} />
+      <Flag country={country} />
+    </div>
+  )
+}
 
 const Languages = ({ country }) => {
   return (
@@ -24,33 +35,33 @@ const Languages = ({ country }) => {
   )
 }
 
-const CountryList = ({ countries, filterText }) => {
+const CountryListElement = ({ country, setFilterText }) => {
+  return (
+    <div>
+      {country.name.common}
+      <button onClick={() => {setFilterText(country.name.common)}}>show</button>
+    </div>
+  )
+}
+
+const CountryList = ({ countries, filterText, setFilterText }) => {
   const filteredCountries = countries
     .filter(country => country.name.common.toLowerCase()
       .includes(filterText.toLowerCase()))
 
-  if(filterText === ""){
+  if (filterText === "") {
     return <p>Enter a filter</p>
   }
   // only one country
   if (filteredCountries.length === 1) {
-    const country = filteredCountries[0]
-    return <div>
-      <h1>{country.name.common}</h1>
-      <p>Capital {country.capital}</p>
-      <p>Area {country.area}</p>
-      <h3>Languages:</h3>
-      <Languages country={country} />
-      <Flag country={country} />
-    </div>
+    return <DisplayCountry country={filteredCountries[0]} />
   }
 
   // less than ten countries
   if (filteredCountries.length < 10) {
     return (
       <div>
-        {
-          filteredCountries.map(country => <p key={country.name.common}>{country.name.common}</p>)}
+        {filteredCountries.map(country => <CountryListElement country={country} setFilterText={setFilterText}/>)}
       </div>
 
     )
@@ -84,7 +95,7 @@ function App() {
     <div>
       <Filter action={handleFilterChange} />
 
-      <CountryList countries={countries} filterText={filterText} />
+      <CountryList countries={countries} filterText={filterText} setFilterText={setFilterText} />
 
     </div>
   )
