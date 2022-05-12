@@ -11,17 +11,58 @@ const Filter = ({ action }) => {
   )
 }
 
+
 const Flag = ({ country }) => <img src={country.flags.png} alt={country.name.common} />
 
+//fetch weather info from capital of selected country
+const GetWeather = ({country}) =>{
+  const [weather, setWeather] = useState([])
+
+  useEffect(() => {
+    const api_key = process.env.REACT_APP_API_KEY
+    const lat = country.capitalInfo.latlng[0]
+    const lon = country.capitalInfo.latlng[1]
+
+    console.log("lat lon",lat, lon)
+    axios
+      .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`)
+      .then(response => {
+        console.log('promise fulfilled')
+        setWeather(response.data)
+      })
+  }, [])
+
+  return weather
+}
+
+const DisplayWeather = ({country}) => {
+  const weather = GetWeather(country={country})
+  console.log(weather)
+
+  if(weather.length != 0){
+    return(
+      <div>
+       <p>Temperature in {country.country.capital} is {weather.main.temp} °C</p>
+       <img src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} />
+       <p>Wind {weather.wind.speed} m/s</p>
+      </div>
+    )
+  }
+  
+}
+
 const DisplayCountry = ({ country }) => {
+
   return (
     <div>
       <h1>{country.name.common}</h1>
       <p>Capital {country.capital}</p>
-      <p>Area {country.area}</p>
+      <p>Area {country.area} km^2</p>
       <h3>Languages:</h3>
       <Languages country={country} />
       <Flag country={country} />
+      <h2>Weather in {country.capital}</h2>
+      <DisplayWeather country={country} />
     </div>
   )
 }
