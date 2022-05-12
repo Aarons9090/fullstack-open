@@ -1,13 +1,24 @@
 import axios from "axios"
+const URL = "http://localhost:3001/persons"
 
 const getAll = () => {
-    const request = axios.get('http://localhost:3001/persons')
+    const request = axios.get(URL)
     return request.then(response => response.data)
 }
 
 const create = newObject => {
-    const request = axios.post("http://localhost:3001/persons", newObject)
+    const request = axios.post(URL, newObject)
     return request.then(response => response.data)
 }
 
-export default { create, getAll }
+const removePerson = id =>{
+    const request = axios.delete(`${URL}/${id}`)
+    return request.then(response => response.data)
+}
+
+const updatePerson = (id, newObject) =>{
+    const request = axios.put(`${URL}/${id}`, newObject)
+    return request.then(response => response.data)
+}
+// eslint-disable-next-line
+export default { create, getAll, removePerson, updatePerson}
