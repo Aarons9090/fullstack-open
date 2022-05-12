@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Filter = ({ action }) => {
   return (
@@ -37,15 +38,21 @@ const ContactList = ({ persons, filterText }) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterText, setFilterText] = useState("")
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }, [])
+
 
   const clearFields = () => {
     setNewName("")
@@ -84,20 +91,20 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      
+
       <Filter action={handleFilterChange} />
-      
+
       <h3>Add new contact</h3>
-      
+
       <PersonForm
         nameAction={handleNameChange} newName={newName}
         numberAction={handleNumberChange} newNumber={newNumber}
         addPerson={addPerson} />
-      
+
       <h2>Numbers</h2>
-      
+
       <ContactList persons={persons} filterText={filterText} />
-      
+
     </div>
   )
 }
