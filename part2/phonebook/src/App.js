@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import personService from "./services/persons"
+import "./index.css"
 
 const Filter = ({ action }) => {
   return (
@@ -39,7 +40,6 @@ const ContantListElement = ({ person, setPersons, persons }) => {
     }
   }
 
-  console.log("contanctListElement", persons)
   return (<div>
     {person.name} {person.number}
     <button onClick={handleRemoveButton}>remove</button>
@@ -60,11 +60,24 @@ const ContactList = ({ persons, filterText, setPersons }) => {
   )
 }
 
+const MessageBar = ({ message }) => {
+  if (message === null) {
+    return null
+
+  }
+
+  return <div>
+    <p className='successMessage'>{message}</p>
+  </div>
+
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterText, setFilterText] = useState("")
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     personService.getAll().then(data => {
@@ -77,7 +90,15 @@ const App = () => {
     setNewName("")
     setNewNumber("")
   }
+
+  const ShowMessage = () => {
+    setMessage("New contact added succesfully")
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
+  }
   const addPerson = (event) => {
+    console.log(newName)
     event.preventDefault()
 
     // check if person already exists
@@ -90,6 +111,8 @@ const App = () => {
         personService.updatePerson(newPerson.id, newPerson).then(
           response => {
             setPersons(persons.map(person => person.id !== newPerson.id ? person : response))
+            ShowMessage()
+
           }
         )
       }
@@ -101,9 +124,12 @@ const App = () => {
       name: newName,
       number: newNumber
     }
+
     personService.create(personObj).then(returnedPerson => {
       setPersons(persons.concat(returnedPerson))
+      ShowMessage()
     })
+
 
     clearFields()
   }
@@ -122,6 +148,7 @@ const App = () => {
 
   return (
     <div>
+      <MessageBar message={message} />
       <h2>Phonebook</h2>
 
       <Filter action={handleFilterChange} />
