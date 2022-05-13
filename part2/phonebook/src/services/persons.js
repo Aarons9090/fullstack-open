@@ -1,5 +1,5 @@
 import axios from "axios"
-const URL = "http://localhost:3001/persons"
+const URL = "https://floating-ocean-12770.herokuapp.com/api/persons"
 
 const getAll = () => {
     const request = axios.get(URL)
@@ -20,5 +20,6 @@ const updatePerson = (id, newObject) =>{
     const request = axios.put(`${URL}/${id}`, newObject)
     return request.then(response => response.data)
 }
+
 // eslint-disable-next-line
 export default { create, getAll, removePerson, updatePerson}

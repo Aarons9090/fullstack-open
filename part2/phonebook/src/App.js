@@ -39,7 +39,7 @@ const ContantListElement = ({ person, setPersons, persons }) => {
     }
   }
 
-  return (<div>
+  return (<div className="listElement" key="1">
     {person.name} {person.number}
     <button onClick={handleRemoveButton}>remove</button>
   </div>
@@ -53,7 +53,7 @@ const ContactList = ({ persons, filterText, setPersons }) => {
       {persons
         .filter(person => person.name.toLowerCase()
           .includes(filterText.toLowerCase()))
-        .map(person => <ContantListElement person={person} setPersons={setPersons} persons={persons} />)}
+        .map(person => <ContantListElement key={person.id} person={person} setPersons={setPersons} persons={persons} />)}
 
     </div>
 
