@@ -6,4 +6,16 @@
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
+<<<<<<< HEAD
+=======
+}
+
+.errorMessage {
+    color: red;
+    font-size: 20;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+>>>>>>> c45935ce5d8318977084b3cf3f6c6903db164e13
 }
