@@ -28,13 +28,14 @@ const PersonForm = ({ nameAction, newName, numberAction, newNumber, addPerson })
 }
 
 
-const ContantListElement = ({ person, setPersons, persons }) => {
+const ContantListElement = ({ person, setPersons, persons}) => {
 
   const handleRemoveButton = (event) => {
     if (window.confirm(`Are you sure you want to delete ${person.name}`)) {
       event.preventDefault()
       personService.removePerson(person.id).then(
-        setPersons(persons.filter(p => p.id !== person.id))
+        setPersons(persons.filter(p => p.id !== person.id)),
+        SuccessMessage("deleted")
       )
     }
   }
@@ -171,6 +172,8 @@ const App = () => {
   const handleFilterChange = (event) => {
     setFilterText(event.target.value)
   }
+
+  
 
   return (
     <div>
