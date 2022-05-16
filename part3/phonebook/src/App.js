@@ -134,7 +134,8 @@ const App = () => {
 
           }
         ).catch(error => {
-          ShowErrorMessage(`Error: ${newName} removed from server`)
+          console.log(error)
+          ShowErrorMessage(error.message)
         }
 
         )
@@ -152,7 +153,7 @@ const App = () => {
       setPersons(persons.concat(returnedPerson))
       ShowMessage(`${newName} added`)
     }).catch(error => {
-      ShowErrorMessage(`Error: ${newName} removed from server`)
+      ShowErrorMessage(error.message)
     })
 
     clearFields()

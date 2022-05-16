@@ -1,5 +1,5 @@
 import axios from "axios"
-const URL = "https://floating-ocean-12770.herokuapp.com/api/persons"
+const URL = "/api/persons"
 
 const getAll = () => {
     const request = axios.get(URL)
