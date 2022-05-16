@@ -135,7 +135,7 @@ const App = () => {
           }
         ).catch(error => {
           console.log(error)
-          ShowErrorMessage(error.message)
+          ShowErrorMessage(error.response.data.error)
         }
 
         )
@@ -153,7 +153,8 @@ const App = () => {
       setPersons(persons.concat(returnedPerson))
       ShowMessage(`${newName} added`)
     }).catch(error => {
-      ShowErrorMessage(error.message)
+      console.log(error)
+      ShowErrorMessage(error.response.data.error)
     })
 
     clearFields()
