@@ -5,14 +5,14 @@ const blogSchema = mongoose.Schema({
     author: String,
     url: String,
     likes: Number
-  })
+})
 
-  blogSchema.set('toJSON', {
+blogSchema.set("toJSON", {
     transform: (document, returnedObject) => {
-      delete returnedObject.__v
+        delete returnedObject.__v
     }
-  })
+})
   
-  const Blog = mongoose.model('Blog', blogSchema)
+const Blog = mongoose.model("Blog", blogSchema)
 
-  module.exports = Blog
+module.exports = Blog
