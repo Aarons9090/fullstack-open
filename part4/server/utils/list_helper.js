@@ -19,10 +19,21 @@ const favoriteBlog = (blogs) => {
 const mostBlogs = (blogs) => {
     if (blogs.length === 0) return null
     const arrayOfAuthors = blogs.map((blog) => { return blog.author })
-    return _.head(_(arrayOfAuthors)
-        .countBy()
-        .entries()
-        .maxBy(_.last))
+    var result = _.flow(
+        _.countBy,
+        _.entries,
+        _.partialRight(_.maxBy, _.last),
+
+    )(arrayOfAuthors);
+    console.log(result)
+    return {
+        "author": result[0],
+        blogs: result[1]
+    }
 }
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs }
+const mostLikes = (blogs) => {
+
+}
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes }
