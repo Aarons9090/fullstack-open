@@ -77,6 +77,20 @@ test("check that post request with no title or url return code 400", async () =>
         
 })
 
+test("delete blog by ind and return 204", async () => {
+    const id = (await helper.contentInDb())[0].id
+    const blogCountBegin = (await helper.contentInDb()).length
+
+    await api
+        .delete(`/api/blogs/${id}`)
+        .expect(204)
+
+
+    const blogCountEnd = (await helper.contentInDb()).length
+
+    expect(blogCountEnd).toBe(blogCountBegin - 1)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
