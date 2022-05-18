@@ -49,6 +49,21 @@ test("check that new blogs can be added", async () => {
 })
 
 
+test("check that blog added with no likes field gets zero likes", async () => {
+    const newBlog = {
+        "author": "kimi räikkönen",
+        "title": "jääukko",
+        "url": "www.rimikäikkönen.fi"
+    }
+
+    const res = await api
+        .post("/api/blogs")
+        .send(newBlog)
+        .expect(201)
+
+    expect(res.body.likes).toBe(0)
+})
+
 
 afterAll(() => {
     mongoose.connection.close()
