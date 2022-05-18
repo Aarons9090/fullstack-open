@@ -7,7 +7,6 @@ const blogsRouter = require("./controllers/blogs")
 const logger = require("./utils/logger")
 const middleware = require("./utils/middleware")
 
-console.log(config.MONGOURL)
 mongoose.connect(config.MONGOURL)
     .then(() => {
         logger.info("connected to MongoDB")
