@@ -64,6 +64,18 @@ test("check that blog added with no likes field gets zero likes", async () => {
     expect(res.body.likes).toBe(0)
 })
 
+test("check that post request with no title or url return code 400", async () => {
+    const newBlog = {
+        "author": "kimi räikkönen",
+        "likes": 10
+    }
+
+    await api
+        .post("/api/blogs")
+        .send(newBlog)
+        .expect(400)
+        
+})
 
 afterAll(() => {
     mongoose.connection.close()
