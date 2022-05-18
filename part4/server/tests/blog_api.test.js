@@ -29,6 +29,26 @@ test("check that all returned blogs have field 'id'", async () => {
     })
 })
 
+test("check that new blogs can be added", async () => {
+    const blogCountBegin = (await helper.contentInDb()).length
+
+    const newBlog = {
+        "author": "kimi räikkönen",
+        "title": "jääukko",
+        "url": "www.rimikäikkönen.fi",
+        "likes": 10032
+    }
+    await api
+        .post("/api/blogs")
+        .send(newBlog)
+        .expect(201)
+
+    const blogCountEnd = (await helper.contentInDb()).length
+
+    expect(blogCountEnd).toBe(blogCountBegin + 1)
+})
+
+
 
 afterAll(() => {
     mongoose.connection.close()
