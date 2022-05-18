@@ -91,6 +91,19 @@ test("delete blog by ind and return 204", async () => {
     expect(blogCountEnd).toBe(blogCountBegin - 1)
 })
 
+
+test("edit existing blog", async () => {
+    const originalBlog = (await helper.contentInDb())[0]
+    const id = originalBlog.id
+
+    const updatedBlog = {...originalBlog, likes: originalBlog.likes +1}
+    const res = await api
+        .put(`/api/blogs/${id}`)
+        .send(updatedBlog)
+  
+    expect(res.body.likes).toBe(originalBlog.likes + 1)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
