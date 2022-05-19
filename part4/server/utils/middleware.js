@@ -16,6 +16,7 @@ const errorHandler = (error, req, res, next) => {
     switch (error.name) {
     case "CastError": return res.status(400).send({ error: error.message })
     case "ValidationError": return res.status(400).json({ error: error.message })
+    case "JsonWebTokerError": return res.status(401).js({error: "invalid token"})
     }
 
     next(error)
