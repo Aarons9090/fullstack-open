@@ -17,6 +17,11 @@ usersRouter.post("/", async (request, response) => {
     if(username.length <4 || password.length <4){
         return response.status(400).json({error: "username or password too short"})
     }
+
+    const existingUser = await User.findOne({username})
+    if(existingUser){
+        return response.status(400).json({error: "username already exists"})
+    }
     
     const saltRounds = 10
     const passwordHash = await bcrypt.hash(password, saltRounds)
