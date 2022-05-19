@@ -30,7 +30,7 @@ test("check that all returned blogs have field 'id'", async () => {
 })
 
 test("check that new blogs can be added", async () => {
-    const blogCountBegin = (await helper.contentInDb()).length
+    const blogCountBegin = (await helper.blogsInDb()).length
 
     const newBlog = {
         "author": "kimi räikkönen",
@@ -43,7 +43,7 @@ test("check that new blogs can be added", async () => {
         .send(newBlog)
         .expect(201)
 
-    const blogCountEnd = (await helper.contentInDb()).length
+    const blogCountEnd = (await helper.blogsInDb()).length
 
     expect(blogCountEnd).toBe(blogCountBegin + 1)
 })
@@ -78,22 +78,22 @@ test("check that post request with no title or url return code 400", async () =>
 })
 
 test("delete blog by ind and return 204", async () => {
-    const id = (await helper.contentInDb())[0].id
-    const blogCountBegin = (await helper.contentInDb()).length
+    const id = (await helper.blogsInDb())[0].id
+    const blogCountBegin = (await helper.blogsInDb()).length
 
     await api
         .delete(`/api/blogs/${id}`)
         .expect(204)
 
 
-    const blogCountEnd = (await helper.contentInDb()).length
+    const blogCountEnd = (await helper.blogsInDb()).length
 
     expect(blogCountEnd).toBe(blogCountBegin - 1)
 })
 
 
 test("edit existing blog", async () => {
-    const originalBlog = (await helper.contentInDb())[0]
+    const originalBlog = (await helper.blogsInDb())[0]
     const id = originalBlog.id
 
     const updatedBlog = {...originalBlog, likes: originalBlog.likes +1}
