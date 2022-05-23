@@ -1,10 +1,47 @@
 import { useState, useEffect } from 'react'
 import blogService from "./services/blogs"
+import Blog from "./components/Blog"
+import loginService from "./services/login"
 
-const BlogPost = ({post}) => {
-  return(
+
+const LoginForm = ({ username, setUsername, password, setPassword, user, setUser }) => {
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+
+    try{
+      const user = await loginService.login({
+        username, password
+      })
+      console.log(user)
+      setUser(user)
+      setUsername("")
+      setPassword("")
+    }catch (exception){
+      console.log("wrong credentials")
+      console.log(exception)
+    }
+  }
+
+  return (
     <div>
-      <p>{post.title} {post.author} {post.url} {post.likes}</p>
+      <form onSubmit={handleLogin}>
+        <div>
+          username: <input
+            onChange={({ target }) => { setUsername(target.value) }}
+            value={username} />
+        </div>
+        <div>
+          password: <input
+            type="password"
+            onChange={({ target }) => { setPassword(target.value) }}
+            value={password} />
+        </div>
+        <div>
+          <button type="submit">Login</button>
+        </div>
+      </form>
+
     </div>
   )
 }
@@ -12,19 +49,19 @@ const BlogPost = ({post}) => {
 const AddBlogForm = () => {
   return (
     <div>
-      <form onSubmit={() => {}}>
+      <form onSubmit={() => { }}>
         <div>
-          title: <input onChange={() => {}} value={""}/>
+          title: <input onChange={() => { }} value={""} />
         </div>
         <div>
-          author: <input onChange={() => {}} value={""}/>
+          author: <input onChange={() => { }} value={""} />
         </div>
         <div>
-          url: <input onChange={() => {}} value={""}/>
+          url: <input onChange={() => { }} value={""} />
         </div>
         <div>
-        <button type="submit">add</button>
-      </div>
+          <button type="submit">add</button>
+        </div>
       </form>
     </div>
   )
@@ -32,6 +69,9 @@ const AddBlogForm = () => {
 
 function App() {
   const [blogs, setBlogs] = useState([])
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(data => {
@@ -39,14 +79,37 @@ function App() {
     })
   }, [])
 
+  const loginForm = () => {
+    return (
+      <LoginForm
+      username={username}
+      setUsername={setUsername}
+      password={password}
+      setPassword={setPassword} 
+      user={user}
+      setUser={setUser}/>
+    )
+  }
+
+  const blogPosts = () => {
+    return(
+      <div>
+      {blogs.map(blog => <Blog key={blog.id} post={blog} />)}
+    </div>
+    )
+  }
+
   return (
     
-    <div>
-      {/* <AddBlogForm /> */}
+    user === null ? 
+      loginForm() :
       
-      {blogs.map(blog => <BlogPost key={blog._id} post={blog}/>)}
-    </div>
-  );
+        <div>
+          <p>Logged in as {user.name}</p>
+          {blogPosts()}
+        </div>
+
+  )
 }
 
 export default App;
