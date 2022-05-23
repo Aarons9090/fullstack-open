@@ -1,5 +1,10 @@
 import axios from "axios"
 const URL = "/api/blogs"
+let token = null
+
+const setToken = newToken => {
+    token = `bearer ${newToken}`
+}
 
 const getAll = () => {
     const request = axios.get(URL)
@@ -22,4 +27,4 @@ const updateBlog = (id, newObject) =>{
 }
 
 // eslint-disable-next-line
-export default { create, getAll, removeBlog, updateBlog}
+export default { create, getAll, removeBlog, updateBlog, setToken}

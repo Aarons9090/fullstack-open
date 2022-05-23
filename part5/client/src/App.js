@@ -17,6 +17,7 @@ const LoginForm = ({ username, setUsername, password, setPassword, user, setUser
       setUser(user)
       setUsername("")
       setPassword("")
+      window.localStorage.setItem("loggedInUser", JSON.stringify(user))
     }catch (exception){
       console.log("wrong credentials")
       console.log(exception)
@@ -79,6 +80,16 @@ function App() {
     })
   }, [])
 
+  // login user
+  useEffect(() => {
+    const loggedUser = window.localStorage.getItem("loggedInUser")
+    if(loggedUser){
+      const user = JSON.parse(loggedUser)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
+
   const loginForm = () => {
     return (
       <LoginForm
@@ -99,12 +110,17 @@ function App() {
     )
   }
 
+  const handleLogOut = () => {
+    setUser(null)
+    window.localStorage.removeItem("loggedInUser")
+  }
+
   return (
     
     user === null ? 
       loginForm() :
-      
         <div>
+          <button onClick={handleLogOut}>Log out</button>
           <p>Logged in as {user.name}</p>
           {blogPosts()}
         </div>
