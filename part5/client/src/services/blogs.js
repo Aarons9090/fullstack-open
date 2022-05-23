@@ -11,9 +11,13 @@ const getAll = () => {
     return request.then(response => response.data)
 }
 
-const create = newObject => {
-    const request = axios.post(URL, newObject)
-    return request.then(response => response.data)
+const create = async newObject => {
+    const config = {
+        headers: {Authorization: token}
+    }
+
+    const response = await axios.post(URL, newObject, config)
+    return response.data
 }
 
 const removeBlog = id =>{

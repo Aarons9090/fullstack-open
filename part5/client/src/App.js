@@ -14,6 +14,7 @@ const LoginForm = ({ username, setUsername, password, setPassword, user, setUser
         username, password
       })
       console.log(user)
+      blogService.setToken(user.token)
       setUser(user)
       setUsername("")
       setPassword("")
@@ -48,17 +49,34 @@ const LoginForm = ({ username, setUsername, password, setPassword, user, setUser
 }
 
 const AddBlogForm = () => {
+  const [title, setTitle] = useState("")
+  const [author, setAuthor] = useState("")
+  const [url, setUrl] = useState("")
+
+  const handleSubmit = async () => {
+    try{
+      const newBlog = {
+        title, author, url
+      }
+
+      const res = await blogService.create(newBlog)
+      console.log(res)
+    }catch(e){
+      console.log(e)
+    }
+  }
+
   return (
     <div>
-      <form onSubmit={() => { }}>
+      <form onSubmit={handleSubmit}>
         <div>
-          title: <input onChange={() => { }} value={""} />
+          title: <input onChange={({target}) => {setTitle(target.value)}} value={title} />
         </div>
         <div>
-          author: <input onChange={() => { }} value={""} />
+          author: <input onChange={({target}) => {setAuthor(target.value)}} value={author} />
         </div>
         <div>
-          url: <input onChange={() => { }} value={""} />
+          url: <input onChange={({target}) => {setUrl(target.value)}} value={url} />
         </div>
         <div>
           <button type="submit">add</button>
@@ -122,6 +140,7 @@ function App() {
         <div>
           <button onClick={handleLogOut}>Log out</button>
           <p>Logged in as {user.name}</p>
+          <AddBlogForm/>
           {blogPosts()}
         </div>
 
