@@ -25,9 +25,9 @@ const removeBlog = id =>{
     return request.then(response => response.data)
 }
 
-const updateBlog = (id, newObject) =>{
-    const request = axios.put(`${URL}/${id}`, newObject)
-    return request.then(response => response.data)
+const updateBlog = async (id, newObject) =>{
+    const response = await axios.put(`${URL}/${id}`, newObject)
+    return response.data
 }
 
 // eslint-disable-next-line
