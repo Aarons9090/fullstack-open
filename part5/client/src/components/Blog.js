@@ -1,9 +1,20 @@
+import Togglable from "./Togglable"
+
 const Blog = ({ post }) => {
     return (
-      <div>
-        <p>{post.title} {post.author} {post.url} {post.likes}</p>
-      </div>
-    )
-  }
+        <div className="blog">
+            <p className="blog-title">{post.title}</p>
+            <Togglable viewlabel="view" cancellabel="hide">
+                <div className="blog-content">
+                    <p>{post.author}</p> 
+                    <p>{post.url}</p> 
+                    <p>{post.likes}</p>
+                </div>
+            </Togglable>
+        </div>
 
-  export default Blog
+
+    )
+}
+
+export default Blog

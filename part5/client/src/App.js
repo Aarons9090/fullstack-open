@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from "react"
 import blogService from "./services/blogs"
 import Blog from "./components/Blog"
 import loginService from "./services/login"
@@ -18,6 +18,7 @@ function App() {
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
+  const blogFormRef = useRef()
  
   useEffect(() => {
     blogService.getAll().then(data => {
@@ -105,6 +106,9 @@ function App() {
         text: `New blog ${res.title} created`,
         class: "success"
       })
+
+      blogFormRef.current.toggleVisibility()
+
       setTimeout(() => {
         setMessage(null)
       }, 5000)
@@ -124,7 +128,7 @@ function App() {
 
   const blogForm = () => {
     return (
-      <Togglable buttonlabel="new blog">
+      <Togglable viewlabel="new blog" cancellabel="cancel" ref={blogFormRef}>
         <BlogForm
           handleChange={handleChange}/>
       </Togglable>
@@ -147,7 +151,7 @@ function App() {
 
   return (
 
-    <div>
+    <div className="background">
       <Message message={message} />
       {user === null ?
         loginForm() :
