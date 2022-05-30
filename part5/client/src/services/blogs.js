@@ -13,25 +13,25 @@ const getAll = () => {
 
 const create = async newObject => {
     const config = {
-        headers: {Authorization: token}
+        headers: { Authorization: token }
     }
 
     const response = await axios.post(URL, newObject, config)
     return response.data
 }
 
-const removeBlog = async id =>{
+const removeBlog = async id => {
     const config = {
-        headers: {Authorization: token}
+        headers: { Authorization: token }
     }
     const response = await axios.delete(`${URL}/${id}`, config)
     return response.data
 }
 
-const updateBlog = async (id, newObject) =>{
+const updateBlog = async (id, newObject) => {
     const response = await axios.put(`${URL}/${id}`, newObject)
     return response.data
 }
 
 // eslint-disable-next-line
-export default { create, getAll, removeBlog, updateBlog, setToken}
+export default { create, getAll, removeBlog, updateBlog, setToken }
