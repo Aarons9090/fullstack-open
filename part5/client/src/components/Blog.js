@@ -1,9 +1,11 @@
 import Togglable from "./Togglable"
 import blogService from "../services/blogs"
 
-const Blog = ({ post, blogs, setBlogs }) => {
+const Blog = ({ post, blogs, setBlogs, callOnLike }) => {
+
     const handleLikeButton = async (event) => {
         event.preventDefault()
+
 
         const newBlog = {
             ...post, likes: post.likes + 1,
@@ -29,7 +31,7 @@ const Blog = ({ post, blogs, setBlogs }) => {
                     <p>{post.author}</p>
                     <p>{post.url}</p>
                     <p>likes {post.likes}</p>
-                    <button onClick={handleLikeButton}>like</button>
+                    <button onClick={callOnLike ? callOnLike : handleLikeButton}>like</button>
                     <button onClick={handleRemoveButton}>remove</button>
                 </div>
             </Togglable>

@@ -6,8 +6,10 @@ import Blog from "./Blog"
 
 describe("Test blog rendering", () => {
     let container
+    let mockHandler
 
     beforeEach(() => {
+        mockHandler = jest.fn()
         const blog = {
             title: "this is title",
             author: "minä",
@@ -16,8 +18,7 @@ describe("Test blog rendering", () => {
         }
 
         container = render(
-
-            <Blog post={blog} />
+            <Blog post={blog} callOnLike={mockHandler} />
         ).container
     })
 
@@ -60,4 +61,33 @@ describe("Test blog rendering", () => {
         )
         expect(likes).toBeVisible()
     })
+
 })
+
+test("check like button event handler calls", async () => {
+    const mockHandler = jest.fn()
+    const blog = {
+        title: "this is title",
+        author: "minä",
+        url: "www.fi",
+        likes: 3,
+    }
+
+    render(
+        <Blog post={blog} callOnLike={mockHandler} />
+    )
+
+    const user = userEvent.setup()
+    const viewButton = screen.getByText("view")
+    const likeButton = screen.getByText("like")
+
+    await user.click(viewButton)
+    screen.debug()
+    await user.click(likeButton)
+    await user.click(likeButton)
+
+    expect(mockHandler.mock.calls).toHaveLength(2)
+})
+
+
+
