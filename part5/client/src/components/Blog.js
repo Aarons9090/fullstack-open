@@ -31,7 +31,7 @@ const Blog = ({ post, blogs, setBlogs, callOnLike }) => {
                     <p>{post.author}</p>
                     <p>{post.url}</p>
                     <p>likes {post.likes}</p>
-                    <button onClick={callOnLike ? callOnLike : handleLikeButton}>like</button>
+                    <button id="like-button" onClick={callOnLike ? callOnLike : handleLikeButton}>like</button>
                     <button onClick={handleRemoveButton}>remove</button>
                 </div>
             </Togglable>
