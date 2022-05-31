@@ -1,4 +1,5 @@
 
+
 describe("Blog app", function () {
     beforeEach(function () {
         cy.request("POST", "http://localhost:3003/api/testing/reset")
@@ -61,16 +62,18 @@ describe("Blog app", function () {
             cy.contains(title)
         })
 
-        it.only("A blog can be liked", function () {
-            // open blog form
-            cy.get("#open-togglable").click()
+    })
 
-            // type blog info + submit
-            const title = "this is title"
-            cy.get("#title-input").type(title)
-            cy.get("#author-input").type("Juha Kuusi")
-            cy.get("#url-input").type("www.fi")
-            cy.get("#submit-button").click()
+    describe.only("When logged in + blog created", function () {
+        beforeEach(function () {
+            const username = "teppo1"
+            const password = "kissa123"
+            cy.newUser({ username, password })
+            cy.login({ username, password })
+            cy.createBlog({ title: "this is title", author: "Jaska", url: "www.fi" })
+        })
+
+        it("A blog can be liked", function () {
 
             //open blog post
             cy.get(".blog").parent().as("blog")
@@ -79,6 +82,16 @@ describe("Blog app", function () {
 
             cy.get("@blog").find("#like-button").click()
             cy.get("@blog").should("contain", "likes 1")
+        })
+
+        it("blog removed", function () {
+            //open blog post
+            cy.get(".blog").parent().as("blog")
+            cy.get("@blog").find("#open-togglable").click()
+
+            cy.get("@blog").find("#remove-button").click()
+            cy.on("window:confirm", () => true)
+            cy.get(".blog").should("not.exist")
         })
     })
 
