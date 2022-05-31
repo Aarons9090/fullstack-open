@@ -64,7 +64,7 @@ describe("Blog app", function () {
 
     })
 
-    describe.only("When logged in + blog created", function () {
+    describe("When logged in + blog created", function () {
         beforeEach(function () {
             const username = "teppo1"
             const password = "kissa123"
@@ -92,6 +92,40 @@ describe("Blog app", function () {
             cy.get("@blog").find("#remove-button").click()
             cy.on("window:confirm", () => true)
             cy.get(".blog").should("not.exist")
+        })
+    })
+
+    describe("Three blogs created", function() {
+        beforeEach(function() {
+            const username = "teppo1"
+            const password = "kissa123"
+            cy.newUser({ username, password })
+            cy.login({ username, password })
+            cy.createBlog({ title: "least likes", author: "Jaska", url: "www.fi" })
+            cy.createBlog({ title: "second most likes", author: "Jaska", url: "www.fi" })
+            cy.createBlog({ title: "most likes", author: "Jaska", url: "www.fi" })
+        })
+
+        it("check blog sorting based on likes", function() {
+            // check original order
+            cy.get(".blog").eq(0).as("least").should("contain", "least likes")
+            cy.get(".blog").eq(1).as("second").should("contain", "second most likes")
+            cy.get(".blog").eq(2).as("most").should("contain", "most likes")
+
+            // like post once
+            cy.get("@second").find("#open-togglable").click()
+            cy.get("@second").find("#like-button").click()
+
+            // like post twice
+            cy.get("@most").find("#open-togglable").click()
+            cy.get("@most").find("#like-button").click()
+            cy.wait(1000)
+            cy.get("@most").find("#like-button").click()
+
+            // check new order
+            cy.get(".blog").eq(0).should("contain", "most likes")
+            cy.get(".blog").eq(1).should("contain", "second most likes")
+            cy.get(".blog").eq(2).should("contain", "least likes")
         })
     })
 
