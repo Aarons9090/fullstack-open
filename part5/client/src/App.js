@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import blogService from "./services/blogs"
-import Blog from "./components/Blog"
 import loginService from "./services/login"
+import Blog from "./components/Blog"
 import BlogForm from "./components/BlogForm"
 import Togglable from "./components/Togglable"
 
@@ -40,9 +40,7 @@ function App() {
         event.preventDefault()
 
         try {
-            const user = await loginService.login({
-                username, password
-            })
+            const user = await loginService.login({ username, password })
 
 
             console.log(user)
