@@ -76,18 +76,20 @@ function App() {
             <div>
                 <form onSubmit={handleLogin}>
                     <div>
-            username: <input
+                        username: <input
+                            id="username"
                             onChange={({ target }) => { setUsername(target.value) }}
                             value={username} />
                     </div>
                     <div>
-            password: <input
+                        password: <input
+                            id="password"
                             type="password"
                             onChange={({ target }) => { setPassword(target.value) }}
                             value={password} />
                     </div>
                     <div>
-                        <button type="submit">Login</button>
+                        <button id="login-button" type="submit">Login</button>
                     </div>
                 </form>
 
@@ -130,7 +132,7 @@ function App() {
         return (
             <Togglable viewlabel="new blog" cancellabel="cancel" ref={blogFormRef}>
                 <BlogForm
-                    handleChange={handleChange}/>
+                    handleChange={handleChange} />
             </Togglable>
 
         )
@@ -139,7 +141,7 @@ function App() {
     const blogPosts = () => {
         return (
             <div>
-                {blogs.sort((a,b) => {return b.likes - a.likes}).map(blog => <Blog key={blog.id} blogs={blogs} setBlogs={setBlogs} post={blog} />)}
+                {blogs.sort((a, b) => { return b.likes - a.likes }).map(blog => <Blog key={blog.id} blogs={blogs} setBlogs={setBlogs} post={blog} />)}
             </div>
         )
     }
