@@ -25,7 +25,7 @@ const AnecdoteList = (props) => {
 
     return (
         <div>
-            {anecdotesToShow().map(anecdote =>
+            {anecdotesToShow().sort((a, b) => b.votes-a.votes).map(anecdote =>
                 <div key={anecdote.id}>
                     <div>
                         {anecdote.content}
