@@ -45,4 +45,6 @@ export const voteAnecdote = id => {
     dispatch(setAnecdotes(anecdotes.map(a => a.id !== id ? a : newAnecdote)))
   }
 }
+
+
 export default anecdotesSlice.reducer
