@@ -100,10 +100,12 @@ const Top = () => {
   )
 }
 
-const Home = ({ anecdotes }) => {
+const Home = ({ anecdotes, notification }) => {
+  console.log(anecdotes)
   return (
     <div>
       <Top />
+      <Notification notification={notification} />
       <AnecdoteList anecdotes={anecdotes} />
       <Footer />
     </div>
@@ -111,7 +113,6 @@ const Home = ({ anecdotes }) => {
 }
 
 const CreatePage = ({addNew, vote}) => {
-  console.log(addNew)
   return (
     <div>
       <Top />
@@ -122,7 +123,6 @@ const CreatePage = ({addNew, vote}) => {
 }
 
 const AboutPage = () => {
-  
   return (
     <div>
       <Top />
@@ -133,7 +133,6 @@ const AboutPage = () => {
 }
 
 const AnecdotePage = ({ anecdote }) => {
-
   return (
     <div>
       <Top />
@@ -143,7 +142,15 @@ const AnecdotePage = ({ anecdote }) => {
   )
 }
 
-
+const Notification = ({notification}) => {
+  return (
+    notification ? 
+    <div style={{border: "1px solid green"}}>
+      {notification}
+    </div>
+    : null
+  )
+}
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -165,10 +172,14 @@ const App = () => {
 
   const [notification, setNotification] = useState('')
 
-
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+
+    setNotification(`${anecdote.content} added`)
+    setTimeout(() => {
+      setNotification("")
+    }, 5000)
   }
 
   const anecdoteById = (id) =>
@@ -193,7 +204,7 @@ const App = () => {
   return (
     <div>
         <Routes>
-          <Route path="/" element={<Home anecdotes={anecdotes} />} />
+          <Route path="/" element={<Home anecdotes={anecdotes} notification={notification} />} />
           <Route path="/create" element={<CreatePage addNew={addNew} vote={vote}/>} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="anecdotes/:id" element={<AnecdotePage anecdote={matchedAnecdote} />} />
