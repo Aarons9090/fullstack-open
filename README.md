@@ -13,7 +13,7 @@ This course teaches JavaScript, React, Redux, Node.js, MongoDB, GraphQL, CSS and
  - [x] Part 3 - Programming a server with NodeJS and Express
  - [x] Part 4 - Testing Express servers, user administration
  - [x] Part 5 - Testing React apps (Jest + Cypress)
- - [ ] Extra part 6 - State management with Redux
+ - [x] Extra part 6 - State management with Redux
  - [ ] Extra part 7 - React router, custom hooks, styling app with CSS and webpack
  - [ ] Additional parts
 
