@@ -21,7 +21,7 @@ const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => 
+      {anecdotes.map(anecdote =>
         <li key={anecdote.id}>
           <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
         </li>)}
@@ -61,9 +61,9 @@ const CreateNew = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content: content.value,
-      author: author.value,
-      info: info.value,
+      content: content.inputs.value,
+      author: author.inputs.value,
+      info: info.inputs.value,
       likes: 0
     })
 
@@ -74,6 +74,8 @@ const CreateNew = (props) => {
     content.reset()
     author.reset()
     info.reset()
+
+    console.log(content.value)
   }
 
   return (
@@ -82,15 +84,15 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <input {...content.inputs} />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...author.inputs} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...info.inputs} />
         </div>
         <button type='submit'>create</button>
         <button type='button' onClick={onReset}>reset</button>
@@ -121,11 +123,11 @@ const Home = ({ anecdotes, notification }) => {
   )
 }
 
-const CreatePage = ({addNew, vote}) => {
+const CreatePage = ({ addNew, vote }) => {
   return (
     <div>
       <Top />
-      <CreateNew addNew={addNew} vote={vote}/>
+      <CreateNew addNew={addNew} vote={vote} />
       <Footer />
     </div>
   )
@@ -151,13 +153,13 @@ const AnecdotePage = ({ anecdote }) => {
   )
 }
 
-const Notification = ({notification}) => {
+const Notification = ({ notification }) => {
   return (
-    notification ? 
-    <div style={{border: "1px solid green"}}>
-      {notification}
-    </div>
-    : null
+    notification ?
+      <div style={{ border: "1px solid green" }}>
+        {notification}
+      </div>
+      : null
   )
 }
 
@@ -212,12 +214,12 @@ const App = () => {
 
   return (
     <div>
-        <Routes>
-          <Route path="/" element={<Home anecdotes={anecdotes} notification={notification} />} />
-          <Route path="/create" element={<CreatePage addNew={addNew} vote={vote}/>} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="anecdotes/:id" element={<AnecdotePage anecdote={matchedAnecdote} />} />
-        </Routes>
+      <Routes>
+        <Route path="/" element={<Home anecdotes={anecdotes} notification={notification} />} />
+        <Route path="/create" element={<CreatePage addNew={addNew} vote={vote} />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="anecdotes/:id" element={<AnecdotePage anecdote={matchedAnecdote} />} />
+      </Routes>
     </div>
   )
 }
