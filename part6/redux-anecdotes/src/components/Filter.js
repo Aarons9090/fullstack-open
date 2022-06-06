@@ -1,14 +1,13 @@
-import { useDispatch } from "react-redux"
 import { updateFilter } from "../reducers/filterReducer"
+import { connect } from "react-redux"
 
+const Filter = (props) => {
 
-const Filter = () => {
-    const dispatch = useDispatch()
     const handleChange = (event) => {
       // input-kentän arvo muuttujassa event.target.value
       event.preventDefault()
       const content = event.target.value
-      dispatch(updateFilter(content))
+      props.updateFilter(content)
     }
     const style = {
       marginBottom: 10
@@ -20,5 +19,19 @@ const Filter = () => {
       </div>
     )
   }
-  
-  export default Filter
+
+  const mapDispatchToProps = {
+    updateFilter,
+  }
+
+  const mapStateToProps = (state) => {
+    return {
+      filter: state.filter
+    }
+  }
+
+  const ConnectedFilter = connect(
+    mapStateToProps,
+    mapDispatchToProps
+    )(Filter)
+  export default ConnectedFilter
