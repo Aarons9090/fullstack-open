@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {
-  Routes, Route, Link, useMatch
+  Routes, Route, Link, useMatch, useNavigate
 } from "react-router-dom"
 
 const Menu = () => {
@@ -54,7 +54,7 @@ const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
-
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -64,6 +64,8 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+
+    navigate("/")
   }
 
   return (
@@ -108,17 +110,19 @@ const Home = ({ anecdotes }) => {
   )
 }
 
-const CreatePage = () => {
+const CreatePage = ({addNew, vote}) => {
+  console.log(addNew)
   return (
     <div>
       <Top />
-      <CreateNew />
+      <CreateNew addNew={addNew} vote={vote}/>
       <Footer />
     </div>
   )
 }
 
 const AboutPage = () => {
+  
   return (
     <div>
       <Top />
@@ -190,7 +194,7 @@ const App = () => {
     <div>
         <Routes>
           <Route path="/" element={<Home anecdotes={anecdotes} />} />
-          <Route path="/create" element={<CreatePage />} />
+          <Route path="/create" element={<CreatePage addNew={addNew} vote={vote}/>} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="anecdotes/:id" element={<AnecdotePage anecdote={matchedAnecdote} />} />
         </Routes>
