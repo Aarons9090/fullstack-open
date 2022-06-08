@@ -4,24 +4,20 @@ import loginService from "./services/login"
 import Blog from "./components/Blog"
 import BlogForm from "./components/BlogForm"
 import Togglable from "./components/Togglable"
-
-const Message = ({ message }) => {
-    if (message === null) {
-        return null
-    }
-    return <div className={message.class}>{message.text}</div>
-}
+import Notification from "./components/Notification"
+import { useDispatch } from "react-redux"
+import { setNotification } from "./reducers/notificationReducer"
 
 function App() {
     const [blogs, setBlogs] = useState([])
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [user, setUser] = useState(null)
-    const [message, setMessage] = useState(null)
     const blogFormRef = useRef()
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        blogService.getAll().then(data => {
+        blogService.getAll().then((data) => {
             setBlogs(data)
         })
     }, [])
@@ -42,28 +38,32 @@ function App() {
         try {
             const user = await loginService.login({ username, password })
 
-
             console.log(user)
             blogService.setToken(user.token)
             setUser(user)
             setUsername("")
             setPassword("")
             window.localStorage.setItem("loggedInUser", JSON.stringify(user))
-            setMessage({
-                text: "Logged in",
-                class: "success"
-            })
-            setTimeout(() => {
-                setMessage(null)
-            }, 5000)
+
+            dispatch(
+                setNotification(
+                    {
+                        text: "Logged in",
+                        class: "success",
+                    },
+                    5
+                )
+            )
         } catch (e) {
-            setMessage({
-                text: "wrong username or password",
-                class: "error"
-            })
-            setTimeout(() => {
-                setMessage(null)
-            }, 5000)
+            dispatch(
+                setNotification(
+                    {
+                        text: "wrong username or password",
+                        class: "error",
+                    },
+                    5
+                )
+            )
             console.log("wrong credentials")
             console.log(e)
         }
@@ -74,72 +74,94 @@ function App() {
             <div>
                 <form onSubmit={handleLogin}>
                     <div>
-                        username: <input
+                        username:{" "}
+                        <input
                             id="username"
-                            onChange={({ target }) => { setUsername(target.value) }}
-                            value={username} />
+                            onChange={({ target }) => {
+                                setUsername(target.value)
+                            }}
+                            value={username}
+                        />
                     </div>
                     <div>
-                        password: <input
+                        password:{" "}
+                        <input
                             id="password"
                             type="password"
-                            onChange={({ target }) => { setPassword(target.value) }}
-                            value={password} />
+                            onChange={({ target }) => {
+                                setPassword(target.value)
+                            }}
+                            value={password}
+                        />
                     </div>
                     <div>
-                        <button id="login-button" type="submit">Login</button>
+                        <button id="login-button" type="submit">
+                            Login
+                        </button>
                     </div>
                 </form>
-
             </div>
         )
     }
 
     const handleChange = async (blogObject) => {
-
         try {
             const res = await blogService.create(blogObject)
             setBlogs(blogs.concat(res))
             console.log(res)
 
-            setMessage({
-                text: `New blog ${res.title} created`,
-                class: "success"
-            })
+            dispatch(
+                setNotification(
+                    {
+                        text: `New blog ${res.title} created`,
+                        class: "success",
+                    },
+                    5
+                )
+            )
 
             blogFormRef.current.toggleVisibility()
-
-            setTimeout(() => {
-                setMessage(null)
-            }, 5000)
-
         } catch (e) {
-            setMessage({
-                text: e.text,
-                class: "error"
-            })
-            setTimeout(() => {
-                setMessage(null)
-            }, 5000)
-
+            dispatch(
+                setNotification(
+                    {
+                        text: e.text,
+                        class: "error",
+                    },
+                    5
+                )
+            )
             console.log(e)
         }
     }
 
     const blogForm = () => {
         return (
-            <Togglable viewlabel="new blog" cancellabel="cancel" ref={blogFormRef}>
-                <BlogForm
-                    handleChange={handleChange} />
+            <Togglable
+                viewlabel="new blog"
+                cancellabel="cancel"
+                ref={blogFormRef}
+            >
+                <BlogForm handleChange={handleChange} />
             </Togglable>
-
         )
     }
 
     const blogPosts = () => {
         return (
             <div>
-                {blogs.sort((a, b) => { return b.likes - a.likes }).map(blog => <Blog key={blog.id} blogs={blogs} setBlogs={setBlogs} post={blog} />)}
+                {blogs
+                    .sort((a, b) => {
+                        return b.likes - a.likes
+                    })
+                    .map((blog) => (
+                        <Blog
+                            key={blog.id}
+                            blogs={blogs}
+                            setBlogs={setBlogs}
+                            post={blog}
+                        />
+                    ))}
             </div>
         )
     }
@@ -150,21 +172,19 @@ function App() {
     }
 
     return (
-
         <div className="background">
-            <Message message={message} />
-            {user === null ?
-                loginForm() :
+            <Notification />
+            {user === null ? (
+                loginForm()
+            ) : (
                 <div>
                     <button onClick={handleLogOut}>Log out</button>
                     <p>Logged in as {user.name}</p>
                     {blogForm()}
                     {blogPosts()}
                 </div>
-            }
+            )}
         </div>
-
-
     )
 }
 
