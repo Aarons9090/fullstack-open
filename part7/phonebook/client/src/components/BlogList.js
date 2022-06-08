@@ -60,7 +60,7 @@ const BlogList = ({ handleLogOut, user }) => {
                         return b.likes - a.likes
                     })
                     .map((blog) => (
-                        <Blog key={blog.id} blogs={blogs} post={blog} />
+                        <Blog key={blog.id} post={blog} />
                     ))}
             </div>
         ) : null

@@ -1,28 +1,20 @@
 import Togglable from "./Togglable"
-import blogService from "../services/blogs"
-//import { useDispatch } from "react-redux"
+import { useDispatch } from "react-redux"
+import { likeBlog, removeBlog } from "../reducers/blogReducer"
 
-const Blog = ({ post, blogs, callOnLike }) => {
-    //const dispatch = useDispatch()
-    const handleLikeButton = async (event) => {
+const Blog = ({ post, callOnLike }) => {
+    const dispatch = useDispatch()
+
+    const handleLikeButton = async event => {
         event.preventDefault()
-
-
-        const newBlog = {
-            ...post, likes: post.likes + 1,
-        }
-
-        const res = await blogService.updateBlog(post.id, newBlog)
-        blogs.map(blog => blog.id === res.id ? { ...blog, likes: res.likes } : blog)
+        dispatch(likeBlog(post.id))
     }
 
-    const handleRemoveButton = async (event) => {
+    const handleRemoveButton = async event => {
         if (window.confirm(`Remove blog ${post.title}?`)) {
             event.preventDefault()
-            await blogService.removeBlog(post.id)
-            //setBlogs(blogs.filter(blog => blog.id !== post.id))
+            dispatch(removeBlog(post.id))
         }
-
     }
     return (
         <div className="blog">
@@ -32,8 +24,15 @@ const Blog = ({ post, blogs, callOnLike }) => {
                     <p>{post.author}</p>
                     <p>{post.url}</p>
                     <p>likes {post.likes}</p>
-                    <button id="like-button" onClick={callOnLike ? callOnLike : handleLikeButton}>like</button>
-                    <button id="remove-button" onClick={handleRemoveButton}>remove</button>
+                    <button
+                        id="like-button"
+                        onClick={callOnLike ? callOnLike : handleLikeButton}
+                    >
+                        like
+                    </button>
+                    <button id="remove-button" onClick={handleRemoveButton}>
+                        remove
+                    </button>
                 </div>
             </Togglable>
         </div>
