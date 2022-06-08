@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react"
-import blogService from "./services/blogs"
 import Notification from "./components/Notification"
 import { useDispatch, useSelector } from "react-redux"
 import { initializeBlogs } from "./reducers/blogReducer"
 import BlogList from "./components/BlogList"
 import { logInUser, removeUser, setUser } from "./reducers/userReducer"
+import UsersPage from "./components/UsersPage"
+import { Routes, Route } from "react-router-dom"
 
 function App() {
     const [username, setUsername] = useState("")
@@ -23,7 +24,6 @@ function App() {
         if (loggedUser) {
             const user = JSON.parse(loggedUser)
             dispatch(setUser(user))
-            blogService.setToken(user.token)
         }
     }, [])
 
@@ -77,13 +77,27 @@ function App() {
         window.localStorage.removeItem("loggedInUser")
     }
     return (
-        <div className="background">
-            <Notification />
-            {user === null ? (
-                loginForm()
-            ) : (
-                <BlogList handleLogOut={handleLogOut} user={user} />
-            )}
+        <div>
+            {" "}
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <div className="background">
+                            <Notification />
+                            {user === null ? (
+                                loginForm()
+                            ) : (
+                                <BlogList
+                                    handleLogOut={handleLogOut}
+                                    user={user}
+                                />
+                            )}
+                        </div>
+                    }
+                />
+                <Route path="/users" element={<UsersPage />} />
+            </Routes>
         </div>
     )
 }
