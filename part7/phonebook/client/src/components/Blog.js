@@ -1,8 +1,9 @@
 import Togglable from "./Togglable"
 import blogService from "../services/blogs"
+//import { useDispatch } from "react-redux"
 
-const Blog = ({ post, blogs, setBlogs, callOnLike }) => {
-
+const Blog = ({ post, blogs, callOnLike }) => {
+    //const dispatch = useDispatch()
     const handleLikeButton = async (event) => {
         event.preventDefault()
 
@@ -12,14 +13,14 @@ const Blog = ({ post, blogs, setBlogs, callOnLike }) => {
         }
 
         const res = await blogService.updateBlog(post.id, newBlog)
-        setBlogs(blogs.map(blog => blog.id === res.id ? { ...blog, likes: res.likes } : blog))
+        blogs.map(blog => blog.id === res.id ? { ...blog, likes: res.likes } : blog)
     }
 
     const handleRemoveButton = async (event) => {
         if (window.confirm(`Remove blog ${post.title}?`)) {
             event.preventDefault()
             await blogService.removeBlog(post.id)
-            setBlogs(blogs.filter(blog => blog.id !== post.id))
+            //setBlogs(blogs.filter(blog => blog.id !== post.id))
         }
 
     }

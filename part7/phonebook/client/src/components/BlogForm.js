@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const BlogForm = ({ handleChange }) => {
+const BlogForm = ({ addBlog }) => {
 
     const [title, setTitle] = useState("")
     const [author, setAuthor] = useState("")
@@ -13,7 +13,7 @@ const BlogForm = ({ handleChange }) => {
     }
     const createBlog = async (event) => {
         event.preventDefault()
-        handleChange({
+        addBlog({
             title, author, url
         })
         clearFields()
