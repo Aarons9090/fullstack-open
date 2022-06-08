@@ -1,68 +1,40 @@
 import { useState, useEffect } from "react"
 import blogService from "./services/blogs"
-import loginService from "./services/login"
 import Notification from "./components/Notification"
-import { useDispatch } from "react-redux"
-import { setNotification } from "./reducers/notificationReducer"
+import { useDispatch, useSelector } from "react-redux"
 import { initializeBlogs } from "./reducers/blogReducer"
 import BlogList from "./components/BlogList"
+import { logInUser, removeUser, setUser } from "./reducers/userReducer"
 
 function App() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
-    const [user, setUser] = useState(null)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(initializeBlogs())
-    })
+    }, [dispatch])
 
     // login user
     useEffect(() => {
         const loggedUser = window.localStorage.getItem("loggedInUser")
+        console.log(window.localStorage)
         if (loggedUser) {
             const user = JSON.parse(loggedUser)
-            setUser(user)
+            dispatch(setUser(user))
             blogService.setToken(user.token)
         }
     }, [])
 
-    const handleLogin = async (event) => {
+    const user = useSelector(state => state.user)
+
+    const handleLogin = async event => {
         event.preventDefault()
 
-        try {
-            const user = await loginService.login({ username, password })
-
-            console.log(user)
-            blogService.setToken(user.token)
-            setUser(user)
-            setUsername("")
-            setPassword("")
-            window.localStorage.setItem("loggedInUser", JSON.stringify(user))
-
-            dispatch(
-                setNotification(
-                    {
-                        text: "Logged in",
-                        class: "success",
-                    },
-                    5
-                )
-            )
-        } catch (e) {
-            dispatch(
-                setNotification(
-                    {
-                        text: "wrong username or password",
-                        class: "error",
-                    },
-                    5
-                )
-            )
-            console.log("wrong credentials")
-            console.log(e)
-        }
+        dispatch(logInUser({ username, password }))
+        setUsername("")
+        setPassword("")
     }
 
     const loginForm = () => {
@@ -101,10 +73,9 @@ function App() {
     }
 
     const handleLogOut = () => {
-        setUser(null)
+        dispatch(removeUser())
         window.localStorage.removeItem("loggedInUser")
     }
-
     return (
         <div className="background">
             <Notification />
