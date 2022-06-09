@@ -1,23 +1,13 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
+import { Link } from "react-router-dom"
 
 const UsersPage = () => {
-    const [users, setUsers] = useState([])
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await axios.get("http://localhost:3003/api/users")
-            setUsers(response.data)
-        }
-        fetchData()
-    }, [])
-
+    const users = useSelector(state => state.allUsers)
     return (
         <div>
             {users ? (
                 <div>
                     <h2>Users</h2>
-
                     <div>
                         <table>
                             <tbody>
@@ -26,13 +16,14 @@ const UsersPage = () => {
                                     <td>Blogs created</td>
                                 </tr>
                                 {users
+                                    .slice()
                                     .sort(
                                         (a, b) =>
                                             b.blogs.length - a.blogs.length
                                     )
                                     .map(user => (
                                         <tr key={user.id}>
-                                            <td>{user.name}</td>
+                                            <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
                                             <td>{user.blogs.length}</td>
                                         </tr>
                                     ))}

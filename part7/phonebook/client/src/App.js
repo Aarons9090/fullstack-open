@@ -2,22 +2,25 @@ import { useState, useEffect } from "react"
 import Notification from "./components/Notification"
 import { useDispatch, useSelector } from "react-redux"
 import { initializeBlogs } from "./reducers/blogReducer"
+import { initializeUsers } from "./reducers/allUsersReducer"
 import BlogList from "./components/BlogList"
 import { logInUser, removeUser, setUser } from "./reducers/userReducer"
 import UsersPage from "./components/UsersPage"
 import { Routes, Route } from "react-router-dom"
+import UserPage from "./components/UserPage"
 
 function App() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
-
     const dispatch = useDispatch()
 
+    // initialize blogs
     useEffect(() => {
         dispatch(initializeBlogs())
+        dispatch(initializeUsers())
     }, [dispatch])
 
-    // login user
+    // log in existing user
     useEffect(() => {
         const loggedUser = window.localStorage.getItem("loggedInUser")
         console.log(window.localStorage)
@@ -28,7 +31,6 @@ function App() {
     }, [])
 
     const user = useSelector(state => state.user)
-
     const handleLogin = async event => {
         event.preventDefault()
 
@@ -76,9 +78,9 @@ function App() {
         dispatch(removeUser())
         window.localStorage.removeItem("loggedInUser")
     }
+
     return (
         <div>
-            {" "}
             <Routes>
                 <Route
                     path="/"
@@ -97,6 +99,7 @@ function App() {
                     }
                 />
                 <Route path="/users" element={<UsersPage />} />
+                <Route path="/users/:id" element={<UserPage />} />
             </Routes>
         </div>
     )
