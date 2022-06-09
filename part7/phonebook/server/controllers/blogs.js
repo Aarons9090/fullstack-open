@@ -9,7 +9,8 @@ require("../utils/middleware")
 
 blogsRouter.get("/", async (request, response) => {
     const blogs = await Blog.find({})
-        .populate("comments user", {username: 1, name:1, id:1, comment: 1})
+        .populate("user", {username: 1, id: 1, name: 1})
+        .populate({path: "comments", populate: {path:"user", select: "username id name"}})
             
     response.json(blogs)
 })
