@@ -6,7 +6,10 @@ const commentSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
-    blog_id: mongoose.Schema.Types.ObjectId
+    blog: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Blog"
+    }
 })
 
 commentSchema.set("toJSON", {

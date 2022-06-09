@@ -4,9 +4,10 @@ require("express-async-errors")
 require("../utils/middleware")
 const jwt = require("jsonwebtoken")
 const { userExtractor } = require("../utils/middleware")
+const Blog = require("../models/blog")
 
 commentsRouter.get("/:id/comments", async (request, response) => {
-    const comments = await Comment.find(com => com.blog_id === request.params.id).populate("user", {username: 1, name: 1, id:1})
+    const comments = await Comment.find({blog: request.params.id}).populate("user", {username: 1, name: 1, id:1})
     response.json(comments)
 })
 
@@ -20,14 +21,19 @@ commentsRouter.post("/:id/comments", userExtractor, async (request, response) =>
     }
 
     const user = request.user
-    console.log(request.params.id)
+
     const comment = new Comment({
         comment: body.comment,
         user: user._id,
-        blog_id: request.params.id
+        blog: request.params.id
     })
 
     const savedComment = await comment.save()
+    const blogs = await Blog.find({})
+    const blog = blogs.find(b => b.id === request.params.id)
+    blog.comments = blog.comments.concat(savedComment._id)
+    await blog.save()
+
     response.status(201).json(savedComment)
 })
 

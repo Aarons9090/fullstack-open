@@ -8,7 +8,9 @@ require("../utils/middleware")
 
 
 blogsRouter.get("/", async (request, response) => {
-    const blogs = await Blog.find({}).populate("user", {username: 1, name: 1, id: 1})
+    const blogs = await Blog.find({})
+        .populate("comments user", {username: 1, name:1, id:1, comment: 1})
+            
     response.json(blogs)
 })
 
@@ -28,7 +30,7 @@ blogsRouter.post("/", userExtractor, async (request, response) => {
         title: body.title,
         url: body.url,
         likes: body.likes ? body.likes : 0,
-        user: user._id
+        user: user._id,
     })
     
     const savedBlog = await blog.save()
