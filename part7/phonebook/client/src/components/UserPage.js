@@ -6,7 +6,7 @@ const UserPage = () => {
 
     const match = useMatch("/users/:id")
     const user = match ? users.find(user => user.id === match.params.id) : null
-    console.log(user)
+
     return (
         <div>
             {user ? (

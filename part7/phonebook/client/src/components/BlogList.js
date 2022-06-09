@@ -6,7 +6,7 @@ import BlogForm from "./BlogForm"
 import Blog from "./Blog"
 import { useRef } from "react"
 
-const BlogList = ({ handleLogOut, user }) => {
+const BlogList = () => {
     const dispatch = useDispatch()
     const blogFormRef = useRef()
     const blogs = useSelector((state) => state.blogs)
@@ -68,8 +68,6 @@ const BlogList = ({ handleLogOut, user }) => {
 
     return (
         <div>
-            <button onClick={handleLogOut}>Log out</button>
-            <p>Logged in as {user.name}</p>
             {blogForm()}
             {blogPosts()}
         </div>

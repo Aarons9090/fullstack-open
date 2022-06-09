@@ -38,3 +38,21 @@
 .background {
     background-color: azure;
 }
+
+.nav-bar {
+    
+    background-color: cadetblue;
+    position: relative;
+}
+
+.nav-bar-child {
+    padding: 5px;
+    display: inline-block;
+}
+
+.nav-bar-logout {
+    position: absolute;
+    margin: 0;
+    right: 10px;
+    top: 33%;
+}

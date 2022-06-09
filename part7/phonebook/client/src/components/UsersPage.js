@@ -1,7 +1,15 @@
-import { useSelector } from "react-redux"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
+import { initializeUsers } from "../reducers/allUsersReducer"
 
 const UsersPage = () => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(initializeUsers())
+    }, [])
+
     const users = useSelector(state => state.allUsers)
     return (
         <div>

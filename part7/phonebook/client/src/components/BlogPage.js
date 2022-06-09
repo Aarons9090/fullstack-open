@@ -24,25 +24,21 @@ const BlogPage = () => {
         }
     }
 
-    return (
+    return blog ? (
         <div>
-            {blog ? (
-                <div>
-                    <h1>{blog.title}</h1>
-                    <h2>author: {blog.author}</h2>
-                    <p>{blog.url}</p>
-                    <p>likes {blog.likes}</p>
-                    <p>added by {blog.user.name}</p>
-                    <button id="like-button" onClick={handleLikeButton}>
-                        like
-                    </button>
-                    <button id="remove-button" onClick={handleRemoveButton}>
-                        remove
-                    </button>
-                </div>
-            ) : null}
+            <h1>{blog.title}</h1>
+            <h2>author: {blog.author}</h2>
+            <p>{blog.url}</p>
+            <p>likes {blog.likes}</p>
+            <p>added by {blog.user.name}</p>
+            <button id="like-button" onClick={handleLikeButton}>
+                like
+            </button>
+            <button id="remove-button" onClick={handleRemoveButton}>
+                remove
+            </button>
         </div>
-    )
+    ) : null
 }
 
 export default BlogPage
