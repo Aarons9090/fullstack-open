@@ -13,16 +13,29 @@ const getAll = () => {
 
 const create = async newObject => {
     const config = {
-        headers: { Authorization: token }
+        headers: { Authorization: token },
     }
 
     const response = await axios.post(URL, newObject, config)
     return response.data
 }
 
+const addComment = async ( comment, id ) => {
+    const config = {
+        headers: { Authorization: token },
+    }
+    console.log("adding", comment ,id)
+    const response = await axios.post(
+        `/api/blogs/${id}/comments`,
+        { comment },
+        config
+    )
+    return response.data
+}
+
 const removeBlog = async id => {
     const config = {
-        headers: { Authorization: token }
+        headers: { Authorization: token },
     }
     const response = await axios.delete(`${URL}/${id}`, config)
     return response.data
@@ -34,4 +47,4 @@ const updateBlog = async (id, newObject) => {
 }
 
 // eslint-disable-next-line
-export default { create, getAll, removeBlog, updateBlog, setToken }
+export default { create, getAll, removeBlog, updateBlog, setToken, addComment }

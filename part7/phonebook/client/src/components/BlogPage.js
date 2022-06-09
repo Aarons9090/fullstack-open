@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useMatch, useNavigate } from "react-router-dom"
 import { likeBlog, removeBlog } from "../reducers/blogReducer"
+import CommentBox from "./CommentBox"
 
 const BlogPage = () => {
     const dispatch = useDispatch()
@@ -37,6 +38,7 @@ const BlogPage = () => {
             <button id="remove-button" onClick={handleRemoveButton}>
                 remove
             </button>
+            <CommentBox blog={blog} />
         </div>
     ) : null
 }
