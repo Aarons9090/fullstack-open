@@ -24,7 +24,6 @@ export const logInUser = credentials => {
     return async dispatch => {
         try {
             const user = await loginService.login(credentials)
-            console.log("recuder: ", user)
             dispatch(setUser(user))
             blogService.setToken(user.token)
             window.localStorage.setItem("loggedInUser", JSON.stringify(user))

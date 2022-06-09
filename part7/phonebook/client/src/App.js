@@ -8,6 +8,8 @@ import { logInUser, removeUser, setUser } from "./reducers/userReducer"
 import UsersPage from "./components/UsersPage"
 import { Routes, Route } from "react-router-dom"
 import UserPage from "./components/UserPage"
+import BlogPage from "./components/BlogPage"
+import blogService from "./services/blogs"
 
 function App() {
     const [username, setUsername] = useState("")
@@ -23,10 +25,10 @@ function App() {
     // log in existing user
     useEffect(() => {
         const loggedUser = window.localStorage.getItem("loggedInUser")
-        console.log(window.localStorage)
         if (loggedUser) {
             const user = JSON.parse(loggedUser)
             dispatch(setUser(user))
+            blogService.setToken(user.token)
         }
     }, [])
 
@@ -100,6 +102,7 @@ function App() {
                 />
                 <Route path="/users" element={<UsersPage />} />
                 <Route path="/users/:id" element={<UserPage />} />
+                <Route path="/blogs/:id" element={<BlogPage />} />
             </Routes>
         </div>
     )
