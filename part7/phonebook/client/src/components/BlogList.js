@@ -1,42 +1,17 @@
 import { useDispatch, useSelector } from "react-redux"
 import { createBlog } from "../reducers/blogReducer"
-import { setNotification } from "../reducers/notificationReducer"
 import Togglable from "./Togglable"
-import BlogForm from "./BlogForm"
 import Blog from "./Blog"
 import { useRef } from "react"
 
 const BlogList = () => {
     const dispatch = useDispatch()
     const blogFormRef = useRef()
-    const blogs = useSelector((state) => state.blogs)
+    const blogs = useSelector(state => state.blogs)
 
-    const addBlog = async (blogObject) => {
-        try {
-            dispatch(createBlog(blogObject))
-            dispatch(
-                setNotification(
-                    {
-                        text: `New blog ${blogObject.title} created`,
-                        class: "success",
-                    },
-                    5
-                )
-            )
-
-            blogFormRef.current.toggleVisibility()
-        } catch (e) {
-            dispatch(
-                setNotification(
-                    {
-                        text: e.text,
-                        class: "error",
-                    },
-                    5
-                )
-            )
-            console.log(e)
-        }
+    const addBlog = async blogObject => {
+        dispatch(createBlog(blogObject))
+        blogFormRef.current.toggleVisibility()
     }
 
     const blogForm = () => {
@@ -45,9 +20,8 @@ const BlogList = () => {
                 viewlabel="new blog"
                 cancellabel="cancel"
                 ref={blogFormRef}
-            >
-                <BlogForm addBlog={addBlog} />
-            </Togglable>
+                addBlog={addBlog}
+            />
         )
     }
 
@@ -59,7 +33,7 @@ const BlogList = () => {
                     .sort((a, b) => {
                         return b.likes - a.likes
                     })
-                    .map((blog) => (
+                    .map(blog => (
                         <Blog key={blog.id} blog={blog} />
                     ))}
             </div>

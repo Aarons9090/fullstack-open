@@ -1,10 +1,19 @@
+import Card from "@mui/material/Card"
+import { CardContent, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
-
+//
 const Blog = ({ blog }) => {
     return (
-        <div className="blog">
-            <p className="blog-title"><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></p>
-        </div>
+        <Link to={`/blogs/${blog.id}`} style={{ textDecoration: "none" }}>
+            <Card style={{ margin: "10px" }}>
+                <CardContent>
+                    <Typography variant="h5">{blog.title}</Typography>
+                    <Typography variant="body2">
+                        Author: {blog.author}
+                    </Typography>
+                </CardContent>
+            </Card>
+        </Link>
     )
 }
 
