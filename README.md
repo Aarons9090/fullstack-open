@@ -18,5 +18,10 @@ This course teaches JavaScript, React, Redux, Node.js, MongoDB, GraphQL, CSS and
  - [ ] Additional parts
 
 ## Other repositories
+
+#### Blog app project
+Part 7 blog app project can be tested [here](https://blog-app-fullstack2022.herokuapp.com/)
+
+#### Phonebook projecy
 Part 3 backend repository can be found [here](https://github.com/Aarons9090/fullstack-open-part3-backend).
 Part 3 Full Stack application can be tested [here](https://fullstack-open2022-phonebook.herokuapp.com/).
